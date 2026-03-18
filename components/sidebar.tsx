@@ -39,33 +39,6 @@ export default function Sidebar() {
           <span className="text-sm font-medium">Saved Phrases</span>
         </a>
       </nav>
-      <div className="mt-auto p-4">
-        <div className="rounded-xl border border-primary/10 bg-primary/5 p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-xs font-bold tracking-wider text-slate-500 uppercase">
-              Emergency Mode
-            </span>
-            <label className="relative inline-flex cursor-pointer items-center">
-              <input className="peer sr-only" type="checkbox" value="" />
-              <div className="peer h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-red-500 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-slate-700"></div>
-            </label>
-          </div>
-          <p className="text-xs leading-relaxed text-slate-500">
-            Instantly connects to a live medical interpreter in 200+ languages.
-          </p>
-        </div>
-        <div className="mt-4 flex items-center gap-3 px-2">
-          <div className="flex size-10 items-center justify-center rounded-full bg-primary/20">
-            <span className="material-symbols-outlined text-primary">
-              person
-            </span>
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Dr. Sarah Chen</p>
-            <p className="text-xs text-slate-500">General Physician</p>
-          </div>
-        </div>
-      </div>
     </aside>
   )
 }

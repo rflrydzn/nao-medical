@@ -32,7 +32,7 @@ export default function Header({
                 </span> */}
         </div>
         <div className="flex size-8 items-center justify-center text-primary">
-          <span className="material-symbols-outlined">swap_horiz</span>
+          <span className="material-symbols-outlined">arrow_right_alt</span>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger

@@ -3,6 +3,7 @@ import { useScribe } from "@elevenlabs/react"
 import { useState, useRef } from "react"
 import Sidebar from "@/components/sidebar"
 import Header from "@/components/header"
+import Glossary from "@/components/glossary-sheet"
 
 export default function MyComponent() {
   const [transcribed, setTranscribed] = useState("")
@@ -11,6 +12,7 @@ export default function MyComponent() {
   const [hasStarted, setHasStarted] = useState(false)
   const [loading, setLoading] = useState(false)
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const textRef = useRef<HTMLTextAreaElement | null>(null)
 
   const scribe = useScribe({
     modelId: "scribe_v2_realtime",
@@ -148,6 +150,7 @@ export default function MyComponent() {
                 <div className="mx-auto max-w-2xl">
                   <div className="rounded-2xl border border-primary/5 bg-slate-50 p-6 dark:bg-slate-800/50">
                     <textarea
+                      ref={textRef}
                       value={scribe.partialTranscript || transcribed || ""}
                       onChange={handleManualInput}
                       placeholder="Tap the mic or type your message..."
@@ -165,15 +168,17 @@ export default function MyComponent() {
                   </span>
                   PROVIDER
                 </h3>
-                <button
-                  onClick={handleSpeak}
-                  className="flex items-center gap-1 text-sm font-semibold text-primary"
-                >
-                  <span className="material-symbols-outlined text-sm">
-                    volume_up
-                  </span>
-                  Listen
-                </button>
+                {translated && (
+                  <button
+                    onClick={handleSpeak}
+                    className="flex items-center gap-1 text-sm font-semibold text-primary"
+                  >
+                    <span className="material-symbols-outlined text-sm">
+                      volume_up
+                    </span>
+                    Listen
+                  </button>
+                )}
               </div>
               <div className="flex-1 space-y-6 overflow-y-auto p-8">
                 <div className="mx-auto max-w-2xl">
@@ -202,7 +207,10 @@ export default function MyComponent() {
           </div>
           <div className="dark:bg-background-dark flex h-32 items-center justify-center gap-12 border-t border-primary/10 bg-white px-8">
             <div className="flex flex-col items-center gap-1">
-              <button className="size-12 rounded-full border-2 border-slate-200 text-slate-400 transition-all hover:border-primary hover:text-primary dark:border-slate-700">
+              <button
+                onClick={() => textRef.current?.focus()}
+                className="size-12 rounded-full border-2 border-slate-200 text-slate-400 transition-all hover:border-primary hover:text-primary dark:border-slate-700"
+              >
                 <span className="material-symbols-outlined">keyboard</span>
               </button>
               <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
@@ -224,14 +232,7 @@ export default function MyComponent() {
                 </span>
               </button>
             </div>
-            <div className="flex flex-col items-center gap-1">
-              <button className="size-12 rounded-full border-2 border-slate-200 text-slate-400 transition-all hover:border-primary hover:text-primary dark:border-slate-700">
-                <span className="material-symbols-outlined">auto_stories</span>
-              </button>
-              <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                Library
-              </span>
-            </div>
+            <Glossary />
           </div>
         </main>
       </div>

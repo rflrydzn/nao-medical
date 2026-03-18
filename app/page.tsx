@@ -1,16 +1,6 @@
 "use client"
 import { useScribe } from "@elevenlabs/react"
-import { useState } from "react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
+import { useState, useRef } from "react"
 import Sidebar from "@/components/sidebar"
 import Header from "@/components/header"
 
@@ -20,6 +10,7 @@ export default function MyComponent() {
   const [language, setLanguage] = useState("English")
   const [hasStarted, setHasStarted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const scribe = useScribe({
     modelId: "scribe_v2_realtime",
@@ -76,6 +67,21 @@ export default function MyComponent() {
     }
     setTranslated(data)
     return data
+  }
+
+  const handleManualInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value
+    setTranscribed(value)
+
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current)
+    }
+
+    if (value.trim()) {
+      debounceTimer.current = setTimeout(() => {
+        handleTranslate(value)
+      }, 2000)
+    }
   }
 
   const handleSpeak = async () => {
@@ -141,10 +147,12 @@ export default function MyComponent() {
               <div className="flex-1 space-y-6 overflow-y-auto p-8">
                 <div className="mx-auto max-w-2xl">
                   <div className="rounded-2xl border border-primary/5 bg-slate-50 p-6 dark:bg-slate-800/50">
-                    <p className="text-xl leading-relaxed text-slate-700 italic dark:text-slate-300">
-                      {scribe.partialTranscript ||
-                        "Tap the mic and start talking"}
-                    </p>
+                    <textarea
+                      value={scribe.partialTranscript || transcribed || ""}
+                      onChange={handleManualInput}
+                      placeholder="Tap the mic or type your message..."
+                      className="w-full resize-none bg-transparent text-xl leading-relaxed text-slate-700 italic outline-none dark:text-slate-300"
+                    />
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 export default function Sidebar() {
   return (
-    <aside className="dark:bg-background-dark flex w-64 flex-col border-r border-primary/10 bg-white">
+    <aside className="dark:bg-background-dark flex hidden w-64 flex-col border-r border-primary/10 bg-white md:inline">
       <div className="flex items-center gap-3 p-6">
         <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-white">
           <span className="material-symbols-outlined">translate</span>

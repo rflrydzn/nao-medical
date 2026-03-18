@@ -11,8 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { languages } from "@/lib/constants"
 import Sidebar from "@/components/sidebar"
+import Header from "@/components/header"
 
 export default function MyComponent() {
   const [transcribed, setTranscribed] = useState("")
@@ -118,60 +118,12 @@ export default function MyComponent() {
       <div className="flex h-screen overflow-hidden">
         <Sidebar />
         <main className="bg-background-light dark:bg-background-dark relative flex flex-1 flex-col">
-          <header className="dark:bg-background-dark flex h-16 items-center justify-between border-b border-primary/10 bg-white px-8">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 rounded-lg bg-slate-100 px-4 py-2 dark:bg-slate-800">
-                <span className="text-xs font-bold text-slate-500">FROM:</span>
-                <span className="flex items-center justify-center text-sm font-semibold">
-                  <span className="material-symbols-outlined text-3xl transition-transform group-active:scale-90">
-                    mic
-                  </span>
-                  Auto Detect
-                </span>
-                {/* <span className="material-symbols-outlined text-sm">
-                  expand_more
-                </span> */}
-              </div>
-              <div className="flex size-8 items-center justify-center text-primary">
-                <span className="material-symbols-outlined">swap_horiz</span>
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  render={
-                    <button className="flex items-center gap-2 rounded-lg bg-slate-100 px-4 py-2 dark:bg-slate-800">
-                      <span className="text-xs font-bold text-slate-500">
-                        TO:
-                      </span>
-                      <span className="text-sm font-semibold">{language}</span>
-                      <span className="material-symbols-outlined text-sm">
-                        expand_more
-                      </span>
-                    </button>
-                  }
-                />
-                <DropdownMenuContent>
-                  {languages.map((language) => (
-                    <DropdownMenuItem
-                      onClick={() => setLanguage(language)}
-                      key={language}
-                    >
-                      {language}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="p-2 text-slate-500 transition-colors hover:text-primary">
-                <span className="material-symbols-outlined">settings</span>
-              </button>
-              <button className="p-2 text-slate-500 transition-colors hover:text-primary">
-                <span className="material-symbols-outlined">help_outline</span>
-              </button>
-            </div>
-          </header>
-          <div className="flex flex-1 divide-x divide-primary/10 overflow-hidden">
-            <section className="dark:bg-background-dark/50 flex flex-1 flex-col bg-white">
+          <Header
+            language={language}
+            onSetLanguage={(value) => setLanguage(value)}
+          />
+          <div className="flex flex-1 flex-col divide-x divide-primary/10 overflow-hidden md:flex-row">
+            <section className="dark:bg-background-dark/50 flex flex-col bg-white md:flex-1">
               <div className="flex items-center justify-between border-b border-primary/5 px-8 py-4">
                 <h3 className="flex items-center gap-2 font-bold text-slate-500">
                   <span className="material-symbols-outlined text-primary">
@@ -197,7 +149,7 @@ export default function MyComponent() {
                 </div>
               </div>
             </section>
-            <section className="dark:bg-background-dark/80 flex flex-1 flex-col bg-slate-50">
+            <section className="dark:bg-background-dark/80 flex hidden flex-1 flex-col bg-slate-50 md:inline">
               <div className="flex items-center justify-between border-b border-primary/5 px-8 py-4">
                 <h3 className="flex items-center gap-2 font-bold text-slate-500">
                   <span className="material-symbols-outlined text-primary">
@@ -254,12 +206,12 @@ export default function MyComponent() {
 
               <button
                 onClick={hasStarted ? handleStop : handleStart}
-                className="group relative flex items-center gap-3 rounded-full bg-primary px-10 py-4 font-bold text-white shadow-lg shadow-primary/40 transition-transform hover:scale-105"
+                className="group relative mb-6 flex items-center gap-3 rounded-full bg-primary px-10 py-10 font-bold text-white shadow-lg shadow-primary/40 transition-transform hover:scale-105 md:mb-0 md:py-4"
               >
                 <span className="material-symbols-outlined text-3xl transition-transform group-active:scale-90">
                   mic
                 </span>
-                <span className="text-lg">
+                <span className="hidden text-lg md:block">
                   {!hasStarted ? "Tap to Speak" : "Listening..."}
                 </span>
               </button>

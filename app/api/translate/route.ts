@@ -8,9 +8,25 @@ export async function POST(req: Request) {
     const { transcribed, language } = await req.json()
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: `Translate ${transcribed} to ${language}`,
+      contents: `Translate the following text into ${language}:
+
+"${transcribed}"`,
       config: {
-        systemInstruction: "You are a translator.",
+        systemInstruction: `
+You are a professional medical translator.
+
+Rules:
+- Output ONLY the translated sentence.
+- Do NOT explain anything.
+- Do NOT use bullet points, asterisks, or formatting.
+- Do NOT include quotes.
+- Do NOT add extra words.
+- Keep it natural and grammatically correct.
+- If input is informal or contains typos, correct it before translating.
+- Preserve medical meaning and use proper medical terminology when appropriate.
+
+Your output must look like Google Translate.
+        `,
       },
     })
     console.log(response.text)

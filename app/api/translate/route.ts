@@ -5,16 +5,24 @@ const ai = new GoogleGenAI({})
 
 export async function POST(req: Request) {
   try {
-    const { transcribed, language } = await req.json()
+    const { transcribed, language, glossary } = await req.json()
+
+    const glossaryBlock =
+      glossary && glossary.length > 0
+        ? `\n\nGlossary reference (use these exact terms in your translation when applicable):\n${glossary
+            .map(
+              (g: { term: string; definition: string }) =>
+                `- ${g.term}: ${g.definition}`
+            )
+            .join("\n")}`
+        : ""
+
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: `Translate the following text into ${language}:
-
-"${transcribed}"`,
+      contents: `Translate the following text into ${language}:\n"${transcribed}"`,
       config: {
         systemInstruction: `
 You are a professional medical translator.
-
 Rules:
 - Output ONLY the translated sentence.
 - Do NOT explain anything.
@@ -24,11 +32,12 @@ Rules:
 - Keep it natural and grammatically correct.
 - If input is informal or contains typos, correct it before translating.
 - Preserve medical meaning and use proper medical terminology when appropriate.
-
-Your output must look like Google Translate.
+- When a glossary is provided, prefer those exact terms over generic alternatives.
+Your output must look like Google Translate.${glossaryBlock}
         `,
       },
     })
+
     console.log(response.text)
     return NextResponse.json(response.text)
   } catch (error) {
